@@ -6,14 +6,14 @@
     <a-list bordered :dataSource="list" class="dt_list" >
       <a-list-item slot="renderItem" slot-scope="item">
         <!-- 复选框 -->
-        <a-checkbox>{{ item.info }}</a-checkbox>
+        <a-checkbox :checked='item.done' @change='(e)=>{cbstStatusChange(e,item.id)}'>{{ item.info }}</a-checkbox>
         <!-- 删除链接 -->
-        <a slot="actions">删除</a>
+        <a slot="actions" @click='removeItemByID(item.id)'>删除</a>
       </a-list-item>
 
       <!-- footer区域 -->
       <div class="footer" slot="footer">
-        <span>0条剩余</span>
+        <span>{{unDoneLength}}条剩余</span>
         <a-button-group>
           <a-button type="primary">全部</a-button>
           <a-button>未完成</a-button>
@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-  import {mapState} from 'vuex'
+  import {mapState,mapGetters} from 'vuex'
   export default {
     name: "app",
     data() {
@@ -36,7 +36,8 @@
       this.$store.dispatch("getList")
     },
     computed:{
-      ...mapState(['list','inputValue'])
+      ...mapState(['list','inputValue']),
+      ...mapGetters(['unDoneLength'])
     },
     methods:{
      // 监听文本框内容变化
@@ -51,6 +52,25 @@
           return this.$message.warning("文本框不能为空")
         }
         this.$store.commit('addItem')
+      },//根据id删除
+      removeItemByID(id)
+      {
+        //根据id删除对应的索引
+        this.$store.commit('removeItem',id)
+        //console.log(id)
+
+      },
+      //复选框，监听事件 选中状态变化
+      cbstStatusChange(e,id){
+        //通过e.target可以拿到最新的复选款状态
+        // console.log(e.target.checked)
+        //console.log(id)
+        const param ={
+          id:id,
+          status:e.target.checked
+        }
+        this.$store.commit('changeStatus',param)
+
       }
     }
   };

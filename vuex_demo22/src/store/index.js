@@ -31,7 +31,24 @@ export default new Vuex.Store({
       state.nextID++
       state.inputValue=""
 
+    },
+    //删除列表项目
+    removeItem(state,id){
+      //根据id删除对应的索引,并进行删除
+    const i =    state.list.findIndex(x =>x.id === id)
+      if(i !== -1){
+        state.list.splice(i,1)
+      }
+
+    },
+    //修改列表项的状态
+    changeStatus(state,param){
+      const i = state.list.findIndex(x => x.id === param.id)
+      if( i !== -1){
+        state.list[i].done = param.status
+      }
     }
+
   },
   actions: {
     getList(context){
@@ -39,6 +56,13 @@ export default new Vuex.Store({
         console.log(data)
         context.commit("initList",data)
       })
+    }
+  },
+  getters:{
+    //统计未完成的任务数
+    unDoneLength(state){
+      const i =  state.list.filter(x => x.done === false)
+      return i.length
     }
   },
   modules: {
