@@ -42,9 +42,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 
-# vuex_demo2
+# vuex_demo22
 
-这个则是比较麻烦一点的Demo，建议先看完第一个，对vuex有个大概了解后再来看这个项目。
+这个则是比较麻烦一点的Demo，主要是通过Vuex来进行全局数据的管理。
+
+建议先看完第一个，对vuex有个大概了解后再来看这个项目。
 
 ## Project setup
 
