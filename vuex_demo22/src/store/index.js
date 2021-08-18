@@ -11,6 +11,8 @@ export default new Vuex.Store({
     //默认的文本值
     inputValue:'aaa',
     nextID : 5,
+    //视图key，默认展示为全部
+    viewKey:'all',
   },
   mutations: {
     initList(state,list){
@@ -47,7 +49,19 @@ export default new Vuex.Store({
       if( i !== -1){
         state.list[i].done = param.status
       }
+    },
+    //清除已经完成的item
+    cleanDone(state){
+
+      //i返回的就是那些为false的数组，也就是未完成的
+      const i =   state.list.filter(x => x.done === false)
+      state.list = i
+    },
+    //修改视图的关键字
+    changeViewKey(state,key){
+      state.viewKey = key
     }
+
 
   },
   actions: {
@@ -63,6 +77,16 @@ export default new Vuex.Store({
     unDoneLength(state){
       const i =  state.list.filter(x => x.done === false)
       return i.length
+    },
+    infoList(state){
+      if(state.viewKey === 'all'){
+        return state.list
+      }else if(state.viewKey === 'undone'){
+        return state.list.filter(x => x.done === false)
+      }if(state.viewKey === 'done'){
+        return state.list.filter(x => x.done === true)
+      }
+      return state.list
     }
   },
   modules: {
